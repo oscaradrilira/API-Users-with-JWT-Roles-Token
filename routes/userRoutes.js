@@ -1,18 +1,22 @@
-const express = require("express");
-const userController = require("../Controllers/userController");
-const authController = require("../Controllers/authController");
+import express from "express";
+import * as userController from "../Controllers/userController.js";
+
+import express from "express";
+import * as userController from "../Controllers/userController.js";
+
+const { autoken } = require("../middleware/authtoken");
 
 const router = express.Router();
 
 // Rutas para usuarios
-router.get("/", userController.getAllUsers);
-router.post("/", userController.createUser);
-router.get("/:id", userController.getUserById);
-router.put("/:id", userController.updateUserById);
-router.delete("/:id", userController.deleteUserById);
+router.get("/", autoken, userController.getAllUsers); // Obtener todos los usuarios
+router.post("/", userController.createUser); // Crear un nuevo usuario (Registro)
+router.get("/:id", autoken, userController.getUserById); // Obtener usuario por ID
+router.put("/:id", autoken, userController.updateUserById); // Actualizar usuario por ID
+router.delete("/:id", autoken, userController.deleteUserById); // Eliminar usuario por ID
 
 // Rutas de autenticación
-router.post("/login", authController.loginUser);
-router.post("/logout", authController.logoutUser);
+router.post("/login", userController.loginUser); // Iniciar sesión
+router.post("/logout", autoken, userController.logoutUser); // Cerrar sesión
 
-module.exports = router;
+export default router;
