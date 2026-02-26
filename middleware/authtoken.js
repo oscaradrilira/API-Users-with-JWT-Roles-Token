@@ -9,7 +9,7 @@ exports.autoken = (req, res, next) => {
     }
     const token = authHeader.split(" ")[1];
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    req.userId = decoded.id;
+    req.id = decoded.id;
     next();
   } catch (error) {
     if (error.name === "TokenExpiredError") {
