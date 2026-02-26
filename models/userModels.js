@@ -25,9 +25,9 @@ const User = {
     },
     // Update users
     update: async (id, useData) => {
-        const { username, email, first_name, last_name, password_hash } = useData;
-        const query = "UPDATE users SET username = ?, email = ?, first_name = ?, last_name = ?, password_hash = ? WHERE id = ?";
-        const [result] = await db.query(query, [username, email, first_name, last_name, password_hash, id]);
+        const { username, email, first_name, last_name } = useData;
+        const query = "UPDATE users SET username = ?, email = ?, first_name = ?, last_name = ? WHERE id = ?";
+        const [result] = await db.query(query, [username, email, first_name, last_name, id]);
         return result.affectedRows;
     },
     // Delete users
@@ -36,10 +36,10 @@ const User = {
         const [result] = await db.query(query, [obtenerFechaMySQL(), false, id]);
         return result.affectedRows;
     },
-    // Login users
-    login: async (email, password_hash) => {
-        const query = "SELECT * FROM users WHERE email = ? AND password_hash = ?";
-        const [rows] = await db.query(query, [email, password_hash]);
+    // getByEmail user
+    getByEmail: async (email) => {
+        const query = "SELECT * FROM users WHERE email = ?";
+        const [rows] = await db.query(query, [email]);
         return rows[0];
     }
 }
