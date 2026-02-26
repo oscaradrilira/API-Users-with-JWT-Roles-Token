@@ -1,20 +1,18 @@
-import express from "express";
-import * as userController from "../Controllers/userController.js";
-
-import express from "express";
-import * as userController from "../Controllers/userController.js";
+const express = require("express");
+const userController = require("../Controllers/userController");
+const authController = require("../Controllers/authController");
 
 const router = express.Router();
 
 // Rutas para usuarios
-router.get("/", userController.getAllUsers); // Obtener todos los usuarios
-router.post("/", userController.createUser); // Crear un nuevo usuario (Registro)
-router.get("/:id", userController.getUserById); // Obtener usuario por ID
-router.put("/:id", userController.updateUserById); // Actualizar usuario por ID
-router.delete("/:id", userController.deleteUserById); // Eliminar usuario por ID
+router.get("/", userController.getAllUsers);
+router.post("/", userController.createUser);
+router.get("/:id", userController.getUserById);
+router.put("/:id", userController.updateUserById);
+router.delete("/:id", userController.deleteUserById);
 
 // Rutas de autenticación
-router.post("/login", userController.loginUser); // Iniciar sesión
-router.post("/logout", userController.logoutUser); // Cerrar sesión
+router.post("/login", authController.loginUser);
+router.post("/logout", authController.logoutUser);
 
-export default router;
+module.exports = router;

@@ -1,35 +1,23 @@
-const express = require("express");
 const db = require("../config/db");
 const User = require("../models/userModels");
-const { comparePassword } = require("../helpers/password_hash");
+const { hashPassword, comparePassword } = require("../helpers/password_hash");
 
 // Get all users
-exports.getAllUsers = (req, res) => async () => {
+exports.getAllUsers = async (req, res) => {
   try {
     const users = await User.getAll();
-    res.status(200).json(users); // return users and status 200 (OK)
-    // traer de modelo
-    // db.query("SELECT * FROM users", (err, results) => {
-    //   if (err) {
-    //     console.error("Error finding users:", err);
-    //     res.status(500).json({ error: "Error finding users" });
-    //     return;
-    //   }
-    //   res.status(200).json(results);
-    // });
+    res.status(200).json(users);
   } catch (error) {
-    res.status(500).json({ error: "Error fetching users" }); // return error and status 500 (Internal Server Error)
+    res.status(500).json({ error: "Error fetching users" });
   }
 };
 
-//Create a new user
-// riceve body username, email, first_name, last_name, password
-exports.createUser = (req, res) => async () => {
+// Create a new user
+exports.createUser = async (req, res) => {
   try {
     const { username, email, first_name, last_name, password } = req.body;
     const password_hash = await hashPassword(password);
-    // add password_hash to body
-    req.body.password = password_hash;
+
     const newUserData = {
       username,
       email,
@@ -37,6 +25,7 @@ exports.createUser = (req, res) => async () => {
       last_name,
       password_hash
     };
+
     await User.create(newUserData);
     res.status(201).json({ message: "User created successfully" });
   } catch (error) {
@@ -45,20 +34,21 @@ exports.createUser = (req, res) => async () => {
 };
 
 // Get a user by ID
-// riceve id
-exports.getUserById = (req, res) => async () => {
+exports.getUserById = async (req, res) => {
   try {
-    const { id } = req.params
-    const user = await User.getById(id)
+    const { id } = req.params;
+    const user = await User.getById(id);
+    if (!user) {
+      return res.status(404).json({ error: "User not found" });
+    }
     res.status(200).json(user);
   } catch (error) {
     res.status(500).json({ error: "Error fetching user" });
   }
 };
 
-//update a user by ID
-// riceve id and body
-exports.updateUserById = (req, res) => async () => {
+// Update a user by ID
+exports.updateUserById = async (req, res) => {
   try {
     const { id } = req.params;
     const { username, email, first_name, last_name } = req.body;
@@ -67,24 +57,30 @@ exports.updateUserById = (req, res) => async () => {
       email,
       first_name,
       last_name,
-    }
-    const user = await User.update(id, updateData);
+    };
+    await User.update(id, updateData);
     res.status(200).json({ message: "User updated successfully" });
   } catch (error) {
     res.status(500).json({ error: "Error updating user" });
   }
 };
 
-//delete a user by ID
-// riceve id
-exports.deleteUserById = (req, res) => async () => {
+// Delete a user by ID
+exports.deleteUserById = async (req, res) => {
   try {
     const { id } = req.params;
-    const user = await User.delete(id);
+    await User.delete(id);
     res.status(200).json({ message: "User deleted successfully" });
   } catch (error) {
     res.status(500).json({ error: "Error deleting user" });
   }
 };
 
+// Placeholder logic for login/logout (normally in authController)
+exports.loginUser = async (req, res) => {
+  res.status(501).json({ message: "Login logic should be in authController" });
+};
 
+exports.logoutUser = async (req, res) => {
+  res.status(200).json({ message: "Logout successful" });
+};

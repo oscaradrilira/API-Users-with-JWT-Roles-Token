@@ -1,48 +1,49 @@
-const { use } = require("react");
-const db = require("../config/db"); // Import config db.js
-const { obtenerFechaMySQL } = require("../helpers/getFormatDate");
+const db = require("../config/db");
+const obtenerFechaMySQL = require("../helpers/getFormatDate");
 
 const User = {
     // Get all users
     getAll: async () => {
-        const query = "SELECT * FROM users";
-        const [rows] = await db.query(query);
+        const [rows] = await db.query("SELECT * FROM users");
         return rows;
     },
     // Get user by id
     getById: async (id) => {
-        const query = "SELECT * FROM users WHERE id = ?";
-        const [rows] = await db.query(query, [id]);
+        const [rows] = await db.query("SELECT * FROM users WHERE id_user = ?", [id]);
         return rows[0];
     },
     // Create users
-    create: async (useData) => {
-        const { username, email, first_name, last_name, password_hash } = useData;
+    create: async (userData) => {
+        const { username, email, first_name, last_name, password_hash } = userData;
         const query = "INSERT INTO users (username, email, first_name, last_name, password_hash) VALUES (?,?,?,?,?)";
         const [result] = await db.query(query, [username, email, first_name, last_name, password_hash]);
         return result.insertId;
-
     },
     // Update users
-    update: async (id, useData) => {
-        const { username, email, first_name, last_name } = useData;
-        const query = "UPDATE users SET username = ?, email = ?, first_name = ?, last_name = ? WHERE id = ?";
+    update: async (id, userData) => {
+        const { username, email, first_name, last_name } = userData;
+        const query = "UPDATE users SET username = ?, email = ?, first_name = ?, last_name = ? WHERE id_user = ?";
         const [result] = await db.query(query, [username, email, first_name, last_name, id]);
         return result.affectedRows;
     },
-    // Delete users
+    // Delete users (Soft delete)
     delete: async (id) => {
-        const query = "UPDATE users SET deleted_at = ?, is_active = ? WHERE id = ?";
+        const query = "UPDATE users SET deleted_at = ?, is_active = ? WHERE id_user = ?";
         const [result] = await db.query(query, [obtenerFechaMySQL(), false, id]);
         return result.affectedRows;
     },
     // getByEmail user
     getByEmail: async (email) => {
-        const query = "SELECT * FROM users WHERE email = ?";
-        const [rows] = await db.query(query, [email]);
+        const [rows] = await db.query("SELECT * FROM users WHERE email = ?", [email]);
         return rows[0];
+    },
+    lastLogin: async (id) => {
+        const query = "UPDATE users SET last_login_at = ? WHERE id_user = ?";
+        const [result] = await db.query(query, [obtenerFechaMySQL(), id]);
+        return result.affectedRows;
     }
 }
 
-module.exports = User; // Export object User
 
+
+module.exports = User;
