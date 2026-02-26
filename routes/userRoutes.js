@@ -10,7 +10,7 @@ const router = express.Router();
 
 // Rutas para usuarios
 router.get("/", autoken, userController.getAllUsers); // Obtener todos los usuarios
-router.post("/", userController.createUser); // Crear un nuevo usuario (Registro)
+router.post("/", autoken, userController.createUser); // Crear un nuevo usuario (Registro)
 router.get("/:id", autoken, userController.getUserById); // Obtener usuario por ID
 router.put("/:id", autoken, userController.updateUserById); // Actualizar usuario por ID
 router.delete("/:id", autoken, userController.deleteUserById); // Eliminar usuario por ID
