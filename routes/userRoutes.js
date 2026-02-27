@@ -3,7 +3,7 @@ const userController = require("../Controllers/userController");
 const { autoken } = require("../middleware/authtoken");
 const { userSchema } = require("../schemas/user.schema");
 const { updateUserSchema } = require("../schemas/user.schema");
-
+const validate = require("../middleware/validate");
 const router = express.Router();
 
 // Rutas para usuarios

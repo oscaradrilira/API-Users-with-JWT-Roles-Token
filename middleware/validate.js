@@ -1,9 +1,9 @@
-const validate = (schema) => {
-  const result = schema.validate(req.body);
-  if (result.error) {
-    return res.status(400).json({ error: result.error.details[0].message });
+const validate = (schema) => (req, res, next) => {
+  const result = schema.safeParse(req.body);
+  if (!result.success) {
+    return res.status(400).json({ error: result.error.issues[0].message });
   }
-  req.body = result.value;
+  req.body = result.data;
   next();
 };
 module.exports = validate;
