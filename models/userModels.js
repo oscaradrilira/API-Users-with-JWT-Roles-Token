@@ -34,7 +34,7 @@ const User = {
     },
     // getByEmail user
     getByEmail: async (email) => {
-        const [rows] = await db.query("SELECT * FROM users WHERE email = ?", [email]);
+        const [rows] = await db.query("SELECT * FROM users WHERE email = ? AND is_active = 1", [email]);
         return rows[0];
     },
     lastLogin: async (id) => {
