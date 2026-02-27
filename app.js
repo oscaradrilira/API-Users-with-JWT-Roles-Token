@@ -8,6 +8,10 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+//IP Limiter and Detecter
+// Add this if you use Heroku, AWS,Nginx o Cloudflare
+// app.set('trust proxy', 1);
+
 // Routes
 app.use("/api/users", userRoutes);
 app.use("/api/auth", authRoutes);

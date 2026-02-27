@@ -10,6 +10,7 @@ exports.loginUser = async (req, res) => {
   try {
     const { password, email } = req.body;
     const user = await User.getByEmail(email);
+    const IPClient = req.ip || req.headers['x-forwarded-for'] || req.socket.remoteAddress;
 
     if (!user) {
       return res.status(401).json({ error: "User not found" });
@@ -27,7 +28,7 @@ exports.loginUser = async (req, res) => {
     const refreshToken = generateRefreshToken(user);
 
     //register date loggin
-    await User.lastLogin(user.id_user);
+    await User.lastLogin(user.id_user, IPClient);
 
     res.status(200).json({
       message: "User logged in successfully",

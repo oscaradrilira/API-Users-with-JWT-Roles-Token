@@ -37,9 +37,9 @@ const User = {
         const [rows] = await db.query("SELECT * FROM users WHERE email = ? AND is_active = 1", [email]);
         return rows[0];
     },
-    lastLogin: async (id) => {
-        const query = "UPDATE users SET last_login_at = ? WHERE id_user = ?";
-        const [result] = await db.query(query, [obtenerFechaMySQL(), id]);
+    lastLogin: async (id, IPClient) => {
+        const query = "UPDATE users SET last_login_at = ?, last_ip = INET6_ATON(?) WHERE id_user = ?";
+        const [result] = await db.query(query, [obtenerFechaMySQL(), IPClient, id]);
         return result.affectedRows;
     }
 }
