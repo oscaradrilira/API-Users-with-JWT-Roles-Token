@@ -2,7 +2,7 @@
 const authController = require("../Controllers/authController");
 const router = require("./userRoutes");
 const { autoken } = require("../middleware/authtoken");
-const loginLimiter = require("../helpers/blockingRule");
+const loginLimiter = require("../middleware/blockingRule");
 
 // Rutas de autenticación
 router.post("/login", loginLimiter, authController.loginUser); // Iniciar sesión
