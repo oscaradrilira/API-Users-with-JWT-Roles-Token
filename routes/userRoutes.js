@@ -1,9 +1,6 @@
-import express from "express";
-import * as userController from "../Controllers/userController.js";
-
-import express from "express";
-import * as userController from "../Controllers/userController.js";
-
+const express = require("express");
+const userController = require("../Controllers/userController");
+const authController = require("../Controllers/authController");
 const { autoken } = require("../middleware/authtoken");
 
 const router = express.Router();
@@ -16,7 +13,7 @@ router.put("/:id", autoken, userController.updateUserById); // Actualizar usuari
 router.delete("/:id", autoken, userController.deleteUserById); // Eliminar usuario por ID
 
 // Rutas de autenticación
-router.post("/login", userController.loginUser); // Iniciar sesión
-router.post("/logout", autoken, userController.logoutUser); // Cerrar sesión
+router.post("/login", authController.loginUser); // Iniciar sesión
+router.post("/logout", autoken, authController.logoutUser); // Cerrar sesión
 
-export default router;
+module.exports = router;

@@ -76,11 +76,4 @@ exports.deleteUserById = async (req, res) => {
   }
 };
 
-// Placeholder logic for login/logout (normally in authController)
-exports.loginUser = async (req, res) => {
-  res.status(501).json({ message: "Login logic should be in authController" });
-};
 
-exports.logoutUser = async (req, res) => {
-  res.status(200).json({ message: "Logout successful" });
-};

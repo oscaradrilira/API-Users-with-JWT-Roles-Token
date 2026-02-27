@@ -1,7 +1,7 @@
-const jwt = require("jsonwebtoken");
-const { generateAccessToken } = require("../helpers/jwt");
+
 const { validateNewAccessToken } = require("../Controllers/authController");
+const router = require("./userRoutes");
 
 router.post("/refresh-token", validateNewAccessToken);
 
-export default router;
+module.exports = router;
